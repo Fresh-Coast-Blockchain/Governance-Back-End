@@ -199,6 +199,302 @@ export const GOVERNOR_ABI = [
   {
     inputs: [
       {
+        internalType: "string",
+        name: "_name",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "_voteTimelock",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_voteToken",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_guardian",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_votingDelay",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_votingPeriod",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_proposalThreshold",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_votingThreshold",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "govAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
+    ],
+    name: "ProposalCanceled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "govAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "proposer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "startTime",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "endTime",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "description",
+        type: "string",
+      },
+    ],
+    name: "ProposalCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "govAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
+    ],
+    name: "ProposalExecuted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "govAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "eta",
+        type: "uint256",
+      },
+    ],
+    name: "ProposalQueued",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "govAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "startBlock",
+        type: "uint256",
+      },
+    ],
+    name: "StartBlockSet",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "govAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "voter",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "support",
+        type: "bool",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "votes",
+        type: "uint256",
+      },
+    ],
+    name: "VoteCast",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "BALLOT_TYPEHASH",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "DOMAIN_TYPEHASH",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "__abdicate",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "__acceptAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newPendingAdmin",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "eta",
+        type: "uint256",
+      },
+    ],
+    name: "__executeSetTimelockPendingAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newPendingAdmin",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "eta",
+        type: "uint256",
+      },
+    ],
+    name: "__queueSetTimelockPendingAdmin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "proposalId",
         type: "uint256",
@@ -327,6 +623,88 @@ export const GOVERNOR_ABI = [
         name: "proposalId",
         type: "uint256",
       },
+    ],
+    name: "getProposalData",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "proposalId_",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "proposalTitle_",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "proposer_",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "startTime_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "endTime_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "startBlock_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "forVotes_",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "againstVotes_",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "canceled_",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "executed_",
+        type: "bool",
+      },
+      {
+        internalType: "enum VoteGovernorAlpha.ProposalState",
+        name: "state_",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getProposalThreshold",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "proposalId",
+        type: "uint256",
+      },
       {
         internalType: "address",
         name: "voter",
@@ -389,6 +767,19 @@ export const GOVERNOR_ABI = [
   },
   {
     inputs: [],
+    name: "getVotingThreshold",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "guardian",
     outputs: [
       {
@@ -421,19 +812,6 @@ export const GOVERNOR_ABI = [
   },
   {
     inputs: [],
-    name: "png",
-    outputs: [
-      {
-        internalType: "contract VoteTokenInterface",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "proposalCount",
     outputs: [
       {
@@ -456,19 +834,6 @@ export const GOVERNOR_ABI = [
       },
     ],
     stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getProposalThreshold",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -559,6 +924,11 @@ export const GOVERNOR_ABI = [
       },
       {
         internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        internalType: "string",
         name: "description",
         type: "string",
       },
@@ -620,64 +990,13 @@ export const GOVERNOR_ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "proposalId",
-        type: "uint256",
-      },
-    ],
-    name: "getProposalData",
+    inputs: [],
+    name: "voteToken",
     outputs: [
       {
-        internalType: "uint256",
-        name: "proposalId_",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "proposer_",
+        internalType: "contract VoteTokenInterface",
+        name: "",
         type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "startTime_",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "endTime_",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "startBlock_",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "forVotes_",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "againstVotes_",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "canceled_",
-        type: "bool",
-      },
-      {
-        internalType: "bool",
-        name: "executed_",
-        type: "bool",
-      },
-      {
-        internalType: "enum VoteGovernorAlpha.ProposalState",
-        name: "state_",
-        type: "uint8",
       },
     ],
     stateMutability: "view",

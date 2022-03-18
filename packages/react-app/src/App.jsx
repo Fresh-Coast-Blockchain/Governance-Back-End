@@ -467,7 +467,7 @@ function App(props) {
   useEffect(() => {
     async function getVoteTokenAddress() {
       if (myGovAddress != ethers.constants.AddressZero) {
-        const newAddress = await theGovContract.png();
+        const newAddress = await theGovContract.voteToken();
         setVoteTokenAddress(newAddress);
       } else {
         setVoteTokenAddress(ethers.constants.AddressZero);

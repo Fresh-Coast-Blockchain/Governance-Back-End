@@ -33,7 +33,7 @@ contract VoteGovernorAlpha {
     VoteTimelockInterface public timelock;
 
     // @notice The address of the Pangolin governance token
-    VoteTokenInterface public png;
+    VoteTokenInterface public voteToken;
 
     // @notice The address of the Governor Guardian
     address public guardian;
@@ -44,6 +44,9 @@ contract VoteGovernorAlpha {
     struct Proposal {
         // @notice Unique id for looking up a proposal
         uint256 id;
+
+        // @notice THe title of the proposal
+        string title;
 
         // @notice Creator of the proposal
         address proposer;
@@ -125,7 +128,8 @@ contract VoteGovernorAlpha {
     bytes32 public constant BALLOT_TYPEHASH = keccak256("Ballot(uint256 proposalId,bool support)");
 
     // @notice An event emitted when a new proposal is created
-    event ProposalCreated(address govAddress, uint256 proposalId, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint256 startTime, uint256 endTime, string description);
+    // event ProposalCreated(address govAddress, uint256 proposalId, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint256 startTime, uint256 endTime, string title, string description);
+    event ProposalCreated(address govAddress, uint256 proposalId, address proposer, uint256 startTime, uint256 endTime, string title, string description);
 
     // @notice An event emitted when the first vote is cast in a proposal
     event StartBlockSet(address govAddress, uint256 proposalId, uint256 startBlock);
@@ -146,7 +150,7 @@ contract VoteGovernorAlpha {
             uint256 _votingPeriod, uint256 _proposalThreshold, uint256 _votingThreshold) {
         name = _name;
         timelock = VoteTimelockInterface(_voteTimelock);
-        png = VoteTokenInterface(_voteToken);
+        voteToken = VoteTokenInterface(_voteToken);
         guardian = _guardian;
         votingDelay = _votingDelay;
         votingPeriod = _votingPeriod;
@@ -154,8 +158,9 @@ contract VoteGovernorAlpha {
         votingThreshold = _votingThreshold;
     }
 
-    function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description) public returns (uint) {
-        require(png.getPriorVotes(msg.sender, block.number - 1) > proposalThreshold, "GovernorAlpha::propose: proposer votes below proposal threshold");
+    function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, 
+            string memory title, string memory description) public returns (uint) {
+        require(voteToken.getPriorVotes(msg.sender, block.number - 1) > proposalThreshold, "GovernorAlpha::propose: proposer votes below proposal threshold");
         require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "GovernorAlpha::propose: proposal function information arity mismatch");
         //for phase one, we will allow non-transaction proposals.
         //require(targets.length != 0, "GovernorAlpha::propose: must provide actions"); 
@@ -175,6 +180,7 @@ contract VoteGovernorAlpha {
         //Proposal storage newProposal = proposals[proposalCount++];
         Proposal storage newProposal = proposals[proposalCount];
         newProposal.id = proposalCount;
+        newProposal.title           = title;
         newProposal.proposer        = msg.sender;
         newProposal.eta             = 0;
         newProposal.targets         = targets;
@@ -191,13 +197,15 @@ contract VoteGovernorAlpha {
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
-        emit ProposalCreated(address(this), newProposal.id, msg.sender, targets, values, signatures, calldatas, startTime, endTime, description);
+        // emit ProposalCreated(address(this), newProposal.id, msg.sender, targets, values, signatures, calldatas, startTime, endTime, title, description);
+        emit ProposalCreated(address(this), newProposal.id, msg.sender, startTime, endTime, title, description);
         return newProposal.id;
     }
 
     function getProposalData(uint256 proposalId) public view 
         returns (
             uint256 proposalId_,
+            string memory proposalTitle_,
             address proposer_,
             uint256 startTime_,
             uint256 endTime_,
@@ -208,10 +216,10 @@ contract VoteGovernorAlpha {
             bool executed_,
             ProposalState state_
         ) {
-        // this is a dummy change to force a recompile
         require(proposalCount >= proposalId && proposalId > 0, "GovernorAlpha::getProposalData: invalid proposal id");
         Proposal storage proposal = proposals[proposalId];
         proposalId_ = proposal.id;
+        proposalTitle_ = proposal.title;
         proposer_ = proposal.proposer;
         startTime_ = proposal.startTime;
         endTime_ = proposal.endTime;
@@ -254,7 +262,7 @@ contract VoteGovernorAlpha {
         require(state != ProposalState.Executed, "GovernorAlpha::cancel: cannot cancel executed proposal");
 
         Proposal storage proposal = proposals[proposalId];
-        require(png.getPriorVotes(proposal.proposer, block.number - 1) < proposalThreshold, "GovernorAlpha::cancel: proposer above threshold");
+        require(voteToken.getPriorVotes(proposal.proposer, block.number - 1) < proposalThreshold, "GovernorAlpha::cancel: proposer above threshold");
 
         proposal.canceled = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
@@ -317,7 +325,7 @@ contract VoteGovernorAlpha {
         }
         Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, "GovernorAlpha::_castVote: voter already voted");
-        uint96 votes = png.getPriorVotes(voter, proposal.startBlock);
+        uint96 votes = voteToken.getPriorVotes(voter, proposal.startBlock);
         require(votes >= votingThreshold, "Not enough tokens to vote");
 
         if (support) {
