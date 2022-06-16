@@ -28,6 +28,7 @@ import { Transactor } from "./helpers";
 // import Hints from "./Hints";
 import { ExampleUI, Hints, Subgraph } from "./views";
 import { useExternalContractLoader } from "./hooks";
+import { StrikethroughOutlined } from "@ant-design/icons";
 
 const { ethers } = require("ethers");
 /*
@@ -441,7 +442,7 @@ function App(props) {
     );
   }
 
-  const myGovAddress = useContractReader(readContracts, "VoteGovernorFactory", "getGovernorAddress", [address]);
+  const myGovAddress = useContractReader(readContracts, "VoteGovernorFactory_V3", "getGovernorAddress", [address]);
   if (DEBUG) console.log("✅ myGovAddress:", myGovAddress);
 
   const theGovContract = useExternalContractLoader(injectedProvider, myGovAddress, GOVERNOR_ABI);
@@ -510,7 +511,7 @@ function App(props) {
               }}
               to="/"
             >
-              VoteGovernorFactory
+              VoteGovernorFactory_V3
             </Link>
           </Menu.Item>
           <Menu.Item key="/mygovernor">
@@ -538,7 +539,7 @@ function App(props) {
         <Switch>
           <Route exact path="/">
             <Contract
-              name="VoteGovernorFactory"
+              name="VoteGovernorFactory_V3"
               price={price}
               signer={userSigner}
               provider={localProvider}
@@ -548,7 +549,7 @@ function App(props) {
             />
             <Events
               contracts={readContracts}
-              contractName="VoteGovernorFactory"
+              contractName="VoteGovernorFactory_V3"
               eventName="GovernorCreated"
               localProvider={localProvider}
               mainnetProvider={mainnetProvider}
@@ -583,7 +584,7 @@ function App(props) {
       </div>
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      {/* 
+      {/*
       <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
         <Row align="middle" gutter={[4, 4]}>
           <Col span={8}>
